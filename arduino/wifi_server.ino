@@ -2,6 +2,10 @@
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 
+// Sensor 
+const int pin = A0;
+int readValue;
+
 // Network ID and password
 const char* ssid = "<NETWORK>";
 const char* password = "<PASSWORD>";
@@ -42,7 +46,10 @@ void loop(void){
   server.handleClient();
 }
 
-// Sends Hello World to browser
+// Humidity sensor value
 void handleRoot() {
-  server.send(200, "text/plain", "Hello World");
+  String msgStart = "{ humidity: ";
+  String msgEnd = "}";
+  String msgBody = msgStart + analogRead(pin) + msgEnd;
+  server.send(200, "application/json", msgBody);
 }
